@@ -19,6 +19,7 @@ public class WordCount {
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
         
+        @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             // Tokenize input text
             StringTokenizer itr = new StringTokenizer(value.toString());
@@ -34,6 +35,7 @@ public class WordCount {
         
         private IntWritable result = new IntWritable();
         
+        @Override
         public void reduce(Text key, Iterable<IntWritable> values, Context context) 
                 throws IOException, InterruptedException {
             // Sum up values for each word
@@ -47,6 +49,12 @@ public class WordCount {
     }
     
     public static void main(String[] args) throws Exception {
+        // Check for proper command-line arguments
+        if (args.length != 2) {
+            System.err.println("Usage: WordCount <input path> <output path>");
+            System.exit(-1);
+        }
+        
         Configuration conf = new Configuration();
         // Set to local mode
         conf.set("fs.defaultFS", "file:///");
